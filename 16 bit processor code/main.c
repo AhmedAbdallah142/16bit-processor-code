@@ -29,8 +29,28 @@ int main()
     unsigned short int memory[256];
     unsigned short int run = 1;
 
+    unsigned short int choosedOperation;
+    //fill the memory with instructions and operands
+    for(int i = 0 ; i<256;i+=2)
+    {
+        printf("\nCHOOSE THE OPERATION :\n0-MOVE\t1-ADD\t2-SUB\t3-BRA\t4-CMP\t5-BEQ\t6-BNE\t7-EXG\t15-Stop\n");
+        scanf("%hu",&choosedOperation);
+        memory[i]=choosedOperation<<4;
+        if (choosedOperation == 15)
+            break;
+        printf("\nCHOOSE Direction:\n0-register to memory\t1-memory to register\n");
+        scanf("%hu",&choosedOperation);
+        memory[i] = (memory[i]&0xF0)+(choosedOperation<<2);
+        printf("\nCHOOSE ADDRESSING MODE:\n0-absolute\t1-literal(immediate)\t2-indexed\t3-PC relative\n");
+        scanf("%hu",&choosedOperation);
+        memory[i] = (memory[i]&0xFC)+(choosedOperation);
+        printf("\nEnter the operand :\n");
+        scanf("%hu",&memory[i+1]);
+    }
 
     while (run){
+
+        //*****************************************************************\\*
         MAR = pc ;
         pc++;
         MBR = memory[MAR];
@@ -175,10 +195,13 @@ int main()
                 break;
             }
         }
+    }
 
 
         if (direction == 0)
         {
+            printf("\nthe value at the specified memory location will be :");
+            printf ("%hu",destination);
              switch (amode)
              {
              case 0 :
@@ -199,8 +222,12 @@ int main()
              }
 
         }
-
-    }
+        else
+        {
+            printf("\nthe value at D0 regigster :");
+            printf ("%hu",D0);
+            printf("\n");
+        }
 
     return 0;
 }
